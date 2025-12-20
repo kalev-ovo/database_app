@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // 根据用户角色跳转到不同页面
                     if ($user['role'] == 1) {
                         // 管理员跳转到后台管理页面
-                        redirect('admin/admin_dashboard.php');
+                        redirect('admin/index.php');
                     } else {
                         // 普通用户跳转到首页
                         redirect('index.php');

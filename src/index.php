@@ -54,7 +54,7 @@ $products = query($sql, $params);
                 <a href="user/favorites.php">收藏夹</a> |
                 <a href="user/complaints.php">我的投诉</a> |
                 <?php if (isAdmin()): ?>
-                    <a href="admin/admin_dashboard.php">后台管理</a> |
+                    <a href="admin/index.php">后台管理</a> |
                 <?php endif; ?>
                 <a href="logout.php">退出</a>
             <?php else: ?>
