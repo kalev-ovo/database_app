@@ -52,7 +52,7 @@ $products = query($sql, $params);
                 <a href="cart.php">购物车</a> |
                 <a href="order.php">订单</a> |
                 <a href="user/favorites.php">收藏夹</a> |
-                <a href="user/complaints.php">我的投诉</a> |
+                <a href="complaint.php">我的投诉</a> |
                 <?php if (isAdmin()): ?>
                     <a href="admin/index.php">后台管理</a> |
                 <?php endif; ?>

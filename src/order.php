@@ -9,16 +9,28 @@ if (!isLoggedIn()) {
 $uid = $_SESSION['uid'];
 
 // 获取用户的所有订单
-$orders = query("SELECT o.*, p.pname, p.pimage FROM order16 o JOIN product16 p ON o.pid = p.pid WHERE o.uid = ?", [$uid]);
+$orders = query("
+    SELECT
+        o.oid, 
+        o.status,
+        o.uid,
+        o.pid,
+        o.amount,
+        o.tdate,
+        p.pname
+    FROM order16 o
+    JOIN product16 p 
+    ON o.pid = p.pid
+    WHERE o.uid = ?", [$uid]);
 
 // 获取订单的交易状态
 $orderStatus = [
-    'pending' => '待支付',
-    'paid' => '已支付',
-    'shipped' => '已发货',
-    'delivered' => '已送达',
-    'completed' => '交易完成',
-    'cancelled' => '已取消'
+    0 => '待支付',
+    1 => '已支付',
+    2 => '已发货',
+    3 => '已送达',
+    4 => '交易完成',
+    5 => '已取消'
 ];
 ?>
 <!DOCTYPE html>
@@ -43,12 +55,12 @@ $orderStatus = [
                     <tr>
                         <th>订单号</th>
                         <th>商品名称</th>
-                        <th>商品图片</th>
+                        <!-- <th>商品图片</th> -->
                         <th>单价</th>
-                        <th>数量</th>
-                        <th>总价</th>
-                        <th>订单状态</th>
+                        <!-- <th>数量</th>
+                        <th>总价</th> -->
                         <th>下单时间</th>
+                        <th>订单状态</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -57,22 +69,21 @@ $orderStatus = [
                         <tr>
                             <td><?php echo $order['oid']; ?></td>
                             <td><?php echo htmlspecialchars($order['pname']); ?></td>
-                            <td><img src="<?php echo htmlspecialchars($order['pimage']); ?>" width="80" height="80"></td>
-                            <td><?php echo $order['oprice']; ?>元</td>
-                            <td><?php echo $order['onumber']; ?></td>
-                            <td><?php echo $order['ototalprice']; ?>元</td>
-                            <td><?php echo $orderStatus[$order['ostatus']]; ?></td>
-                            <td><?php echo $order['otime']; ?></td>
+                            <td><?php echo $order['amount']; ?> 元</td>
+                            <td><?php echo $order['tdate']; ?></td>
+                            <!-- 订单状态（纯显示） -->
+                            <td>
+                                <?php echo $orderStatus[$order['status']] ?? '未知状态'; ?>
+                            </td>
+                            <!-- 操作 -->
                             <td>
                                 <a href="order_detail.php?oid=<?php echo $order['oid']; ?>">查看详情</a>
-                                <?php if ($order['ostatus'] == 'pending'): ?>
-                                    <a href="payment.php?oid=<?php echo $order['oid']; ?>">去支付</a>
+                                <?php if ($order['status'] == 0): ?>
+                                    | <a href="payment.php?oid=<?php echo $order['oid']; ?>">去支付</a>
                                 <?php endif; ?>
-                                <?php if ($order['ostatus'] == 'delivered'): ?>
-                                    <a href="confirm_receipt.php?oid=<?php echo $order['oid']; ?>">确认收货</a>
-                                <?php endif; ?>
-                                <?php if ($order['ostatus'] == 'completed'): ?>
-                                    <a href="complaint.php?oid=<?php echo $order['oid']; ?>">投诉</a>
+                                <?php if ($order['status'] == 1): ?>
+                                    | <a href="confirm_receipt.php?oid=<?php echo $order['oid']; ?>">确认收货</a>
+                                    | <a href="complaint.php?oid=<?php echo $order['oid']; ?>">投诉</a>
                                 <?php endif; ?>
                             </td>
                         </tr>

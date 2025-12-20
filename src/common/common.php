@@ -158,7 +158,6 @@ function getProductById($pid) {
  * @return bool 是否已收藏
  */
 function isFavorited($uid, $pid) {
-    // 这里需要根据实际的收藏表结构来实现，暂时假设收藏表名为favorite16
     $sql = "SELECT COUNT(*) as count FROM favorite16 WHERE uid = ? AND pid = ?";
     $result = queryOne($sql, [$uid, $pid]);
     return $result['count'] > 0;

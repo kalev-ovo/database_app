@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['checkout'])) {
                         $amount = $item['price'] * $item['quantity'];
                         
                         // 创建订单
-                        $sql = "INSERT INTO order16 (oid, pid, uid, cid, tdate, amount, status) VALUES (?, ?, ?, ?, NOW(), ?, 1)";
+                        $sql = "INSERT INTO order16 (oid, pid, uid, cid, tdate, amount, status) VALUES (?, ?, ?, ?, NOW(), ?, 0)";
                         execute($sql, [$oid, $item['pid'], $uid, $cid, $amount]);
                     }
                     
